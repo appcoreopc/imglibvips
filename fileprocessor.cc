@@ -6,9 +6,9 @@
 
 using namespace std;
 
-string folderPath;
+const char* folderPath;
 
-fileprocessor::fileprocessor(string path)
+fileprocessor::fileprocessor(const char* path)
 {
    folderPath = path;
 }
@@ -18,19 +18,24 @@ fileprocessor::~fileprocessor()
 
 }
 
-std::vector<std::string> fileprocessor::getFiles(string pattern)
+std::vector<std::string> fileprocessor::getFiles(const char* path)
 {
     DIR *dir;
     struct dirent *ent;
     std::vector<std::string> list;
 
-    if ((dir = opendir("test")) != NULL) {
+    if ((dir = opendir(folderPath)) != NULL) {
 
         while ((ent = readdir(dir)) != NULL) {
-            cout << " files " << ent->d_name;
-            list.push_back(ent->d_name);
+                        
+            string s = ent->d_name;
+            if ((s.find("png") != std::string::npos))
+            {
+                 list.push_back(ent->d_name);
+            }
         }
     }
+
     return list;       
 }
 

@@ -8,10 +8,10 @@ class fileprocessor
 {
 private:
     /* data */
-    string folderPath;
+    const char* folderPath;
 public:
-    fileprocessor(string path);
+    fileprocessor(const char* path);
     ~fileprocessor();
-    std::vector<std::string> getFiles(string pattern);
+    std::vector<std::string> getFiles(const char* path);
 };
 

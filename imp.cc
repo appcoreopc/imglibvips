@@ -3,29 +3,41 @@
 #include <iostream>
 #include <string>
 #include "fileprocessor.h"
+#include "imageprocessor.h"
+
 
 using namespace vips;
 using namespace std;
 
 int main (int argc, char **argv)
 { 
-   fileprocessor f ("test");
+   fileprocessor f ("/home/jeremy/tmp/");
    auto path = f.getFiles("");
   
    for(auto i = path.begin(); i != path.end(); i++)
    {
      cout << "" << endl;
    }
+
     
   if (VIPS_INIT (argv[0])) 
     vips_error_exit (NULL);
   
-  if (argc != 3)
-    vips_error_exit ("usage: %s input-file output-file", argv[0]);
+ // if (argc != 3)
+ //   vips_error_exit ("usage: %s input-file output-file", argv[0]);
+
+   imageprocessor imp(path); 
+   imp.execute();
+
+
+
+
+
 
   VImage in = VImage::new_from_file (argv[1],
     VImage::option ()->set ("access", VIPS_ACCESS_SEQUENTIAL));
-  
+ 
+
   double avg = in.avg ();
   
   printf ("avg = %g\n", avg);
