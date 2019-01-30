@@ -7,7 +7,6 @@
 
 using namespace std;
 using namespace vips;
-namespace fs = std::experimental::filesystem;
 
 std::vector<std::string> images;
 string location;
@@ -19,65 +18,43 @@ imageprocessor::imageprocessor(std::vector<std::string> imageList, string path)
 }
 
 imageprocessor::~imageprocessor()
-{
+{    
 }
 
-void imageprocessor::execute() {
+void imageprocessor::execute(int &height, int &width) {
 
-  for (auto i : images) {
-       cout << "file " << i.c_str() << endl;
+   if (!validateSize(height, width))
+      return;
 
-       auto filename = "/home/jeremy/tmp/" + imageprocessor::basename(i);
+
+  for (auto imgElement : images) {
+            
+       cout << "Processing file " << imgElement.c_str() << endl;
+
+        auto rawFileName = getFilenameWithoutExtension(imgElement);
+
+        auto filename = location + "/" + imgElement;
             
        VImage source = VImage::new_from_file(filename.c_str(), 
        VImage::option ()->set ("access", VIPS_ACCESS_SEQUENTIAL));
 
        // applies resize //
+       VImage target =  source.shrink(height, width);
 
-       VImage target =  source.resize(0.5);
-
-       char* fname = const_cast<char *>(string("tstttt").c_str());
+       auto finalOutputfile = rawFileName + ".webp";
+       char* fname = const_cast<char *>(finalOutputfile.c_str());
 
        cout << "output filename " << fname;
-       target.jpegsave(fname);
-
-       
+       target.webpsave(fname);       
    }
 }
 
-std::string imageprocessor::basename(std::string &filename)
-{
-    if (filename.empty()) {
-        return {};
-    }
-
-    auto len = filename.length();
-    auto index = filename.find_last_of("/\\");
-
-    if (index == std::string::npos) {
-        return filename;
-    }
-
-    if (index + 1 >= len) {
-
-        len--;
-        index = filename.substr(0, len).find_last_of("/\\");
-
-        if (len == 0) {
-            return filename;
-        }
-
-        if (index == 0) {
-            return filename.substr(1, len - 1);
-        }
-
-        if (index == std::string::npos) {
-            return filename.substr(0, len);
-        }
-
-        return filename.substr(index + 1, len - index - 1);
-    }
-
-    return filename.substr(index + 1, len - index);
+string imageprocessor::getFilenameWithoutExtension(string fullname) {
+    size_t lastindex = fullname.find_last_of("."); 
+    string rawname = fullname.substr(0, lastindex); 
+    return rawname;
 }
 
+bool imageprocessor::validateSize(int &height, int &width) {    
+    return (height > 20 && height <= 2000 && width > 20 && width <= 2000);
+}

@@ -9,11 +9,12 @@ class imageprocessor
 private:
     /* data */
     std::vector<std::string> images;
-    std::string basename(std::string &filename);
+    string getFilenameWithoutExtension(string fullname);
+    bool validateSize(int &height, int &width);
 public:
     imageprocessor(std::vector<std::string> imageList, string path);
     ~imageprocessor();
 
-    void execute();
+    void execute(int &height, int &width);
 };
 
