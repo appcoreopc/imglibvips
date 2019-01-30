@@ -6,9 +6,9 @@
 
 using namespace std;
 
-const char* folderPath;
+string folderPath;
 
-fileprocessor::fileprocessor(const char* path)
+fileprocessor::fileprocessor(string path)
 {
    folderPath = path;
 }
@@ -24,7 +24,7 @@ std::vector<std::string> fileprocessor::getFiles(const char* path)
     struct dirent *ent;
     std::vector<std::string> list;
 
-    if ((dir = opendir(folderPath)) != NULL) {
+    if ((dir = opendir(folderPath.c_str())) != NULL) {
 
         while ((ent = readdir(dir)) != NULL) {
                         

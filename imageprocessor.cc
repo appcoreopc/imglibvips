@@ -10,10 +10,12 @@ using namespace vips;
 namespace fs = std::experimental::filesystem;
 
 std::vector<std::string> images;
+string location;
 
-imageprocessor::imageprocessor(std::vector<std::string> imageList)
+imageprocessor::imageprocessor(std::vector<std::string> imageList, string path)
 {
     images = imageList;
+    location = path;
 }
 
 imageprocessor::~imageprocessor()
@@ -32,12 +34,14 @@ void imageprocessor::execute() {
 
        // applies resize //
 
-       VImage target =  source.resize(200);
+       VImage target =  source.resize(0.5);
 
        char* fname = const_cast<char *>(string("tstttt").c_str());
 
        cout << "output filename " << fname;
        target.jpegsave(fname);
+
+       
    }
 }
 

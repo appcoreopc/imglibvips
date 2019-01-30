@@ -11,7 +11,7 @@ private:
     std::vector<std::string> images;
     std::string basename(std::string &filename);
 public:
-    imageprocessor(std::vector<std::string> imageList);
+    imageprocessor(std::vector<std::string> imageList, string path);
     ~imageprocessor();
 
     void execute();
